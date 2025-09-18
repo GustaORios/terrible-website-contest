@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lifetime Free Coffee Signup</title>
+    <link rel="stylesheet" href="common.css">
+</head>
+
+<body>
+    <h1>TIM HORTONS - Sign Up for Free Coffee for Life*</h1>
+    <form id="badForm">
+
+        <label for="email">Email</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="name">Your Full Name</label>
+        <input type="email" id="email" name="email" required>
+
+        <label>Date of Birth</label>
+        <select id="day">
+            <option>Day</option>
+        </select>
+        <select id="month">
+            <option>Month</option>
+        </select>
+
+        <input type="range" id="yearRange" min="1900" max="2025" value="2000">
+        <span id="yearValue">2000</span>
+        <label for="yearRange">Year of Birth</label>
+
+        <script>
+            const day = document.getElementById('day');
+            const month = document.getElementById('month');
+
+            for (let i = 31; i >= 1; i--) {
+                day.innerHTML += `<option value="${i}">${i}</option>`;
+            }
+
+            const months = ["December", "April", "January", "August", "March", "July", "February", "June", "May", "November", "October", "September"];
+            months.forEach(m => {
+                month.innerHTML += `<option value="${m}">${m}</option>`;
+            });
+
+            const range = document.getElementById('yearRange');
+            const output = document.getElementById('yearValue');
+
+            output.textContent = range.value;
+
+            range.addEventListener('input', () => {
+                output.textContent = range.value;
+            });
+        </script>
+
+
+        <input type="text" id="zipcode" name="zipcode" required>
+        <label for="zipcode">Canadian Postal Code</label>
+
+
+        <div class="slot-container">
+            <div class="slot" id="slot1">-</div>
+            <div class="slot" id="slot2">-</div>
+            <div class="slot" id="slot3">-</div>
+        </div>
+
+        <div class="error" id="errorMsg"></div>
+
+        <button type="submit" id="submitBtn">Submit</button>
+
+
+        <script>
+            function spinSlot(slotId, finalNumber, delay) {
+                const slot = document.getElementById(slotId);
+                let count = 0;
+                const interval = setInterval(() => {
+                    slot.textContent = Math.floor(Math.random() * 10);
+                    slot.style.animation = "spin 0.5s ease-in-out";
+                    count++;
+                    if (count > 10) {
+                        clearInterval(interval);
+                        slot.textContent = finalNumber;
+                    }
+                }, delay);
+            }
+
+            document.getElementById('badForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const zip = document.getElementById('zipcode').value;
+
+                let error = "";
+
+                if (name.includes(" ")) error += "Name cannot contain spaces.<br>";
+                if (!email.endsWith("@timhortons.ca")) error += "Email must be @timhortons.ca.<br>";
+                if (!/^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/.test(zip)) error += "Invalid postal code format.<br>";
+
+                document.getElementById('errorMsg').innerHTML = error;
+
+                if (!error) {
+                    const final1 = Math.floor(Math.random() * 10);
+                    const final2 = Math.floor(Math.random() * 10);
+                    const final3 = Math.floor(Math.random() * 10);
+
+                    spinSlot("slot1", final1, 100);
+                    spinSlot("slot2", final2, 100);
+                    spinSlot("slot3", final3, 100);
+
+                    setTimeout(() => {
+                        if (final1 === 7 && final2 === 7 && final3 === 7) {
+                            alert("🎉 Jackpot! You're signed up for free coffee for life!");
+                        } else {
+                            alert("❌ Try again! You need to hit 7 7 7 to sign up.");
+                        }
+                    }, 1500);
+                }
+            });
+
+        </script>
+    </form>
+</body>
+
+</html>
